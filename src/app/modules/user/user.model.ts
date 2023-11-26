@@ -3,6 +3,7 @@ import {
   AddressType,
   FullNameType,
   OrdersType,
+  UserModel,
   UserType,
 } from './user.interface';
 
@@ -47,7 +48,7 @@ const OrdersSchema = new Schema<OrdersType>({
   },
 });
 
-const UserSchema = new Schema<UserType>({
+const UserSchema = new Schema<UserType, UserModel>({
   userId: {
     type: Number,
     required: true,
@@ -80,8 +81,21 @@ const UserSchema = new Schema<UserType>({
     type: [String],
     required: true,
   },
-  address: AddressSchema,
-  orders: [OrdersSchema],
+  address: {
+    type: AddressSchema,
+    required: true,
+  },
+  orders: {
+    type: [OrdersSchema],
+    required: true,
+  },
 });
 
-export const UserModel = model<UserType>('User', UserSchema);
+//creating a custom static
+UserSchema.statics.isUserExists = async function (userId: number){
+    const existingUser = await User.findOne({userId});
+    return existingUser;
+}
+ 
+export const User = model<UserType, UserModel>('User', UserSchema);
+

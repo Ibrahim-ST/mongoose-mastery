@@ -1,13 +1,16 @@
 import { UserType } from './user.interface';
-import { UserModel } from './user.model';
+import { User } from './user.model';
 
 const createUserIntoDb = async (userData: UserType) => {
-  const result = await UserModel.create(userData);
+  if (await User.isUserExists(userData.userId)) {
+      throw new Error('User already exists');
+  }
+  const result = await User.create(userData);
   return result;
 };
 
 const getAllUsersFromDB = async () => {
-  const result = await UserModel.find(
+  const result = await User.find(
     {},
     {
       _id: 0,
@@ -26,7 +29,7 @@ const getAllUsersFromDB = async () => {
 };
 
 const getSingleUserFromDB = async (id: number) => {
-  const result = await UserModel.findOne({ userId: id }, { password: 0 });
+  const result = await User.findOne({ userId: id }, { password: 0, _id: 0 });
   return result;
 };
 
