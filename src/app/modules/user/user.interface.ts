@@ -1,30 +1,30 @@
 // import { Model } from 'mongoose'; 
 
-export type FullName = {
+export type FullNameType = {
   firstName: string;
   lastName: string;
 };
 
-export type Address = {
+export type AddressType = {
   street: string;
   city: string;
   country: string;
 };
 
-export type Orders = {
+export type OrdersType = {
   productName: string;
   price: number;
   quantity: number;
 };
-export type User = {
-  id: number;
+export type UserType = {
+  userId: number;
   username: string;
   password: string;
-  fullName: FullName;
+  fullName: FullNameType;
   age: number;
   email: string;
   isActive: boolean;
   hobbies: string[];
-  address: Address;
-  orders: Orders;
+  address: AddressType;
+  orders: OrdersType[];
 };
