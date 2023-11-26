@@ -1,5 +1,10 @@
 import { Schema, model } from 'mongoose';
-import { AddressType, FullNameType, OrdersType, UserType } from './user.interface';
+import {
+  AddressType,
+  FullNameType,
+  OrdersType,
+  UserType,
+} from './user.interface';
 
 const FullNameSchema = new Schema<FullNameType>({
   firstName: {
@@ -78,6 +83,5 @@ const UserSchema = new Schema<UserType>({
   address: AddressSchema,
   orders: [OrdersSchema],
 });
-
 
 export const UserModel = model<UserType>('User', UserSchema);
