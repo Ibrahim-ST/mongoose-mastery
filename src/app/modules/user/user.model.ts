@@ -91,10 +91,28 @@ const UserSchema = new Schema<UserType, UserModel>({
   },
 });
 
+// // pre save middleware
+// UserSchema.pre('save', function() {
+//   console.log(this, 'pre hook');
+// })
+
+// // post save middleware
+// UserSchema.post('save', function(){
+//   console.log(this, 'post hook');
+// })
+
 //creating a custom static
 UserSchema.statics.isUserExists = async function (userId: number){
     const existingUser = await User.findOne({userId});
     return existingUser;
+}
+UserSchema.statics.isEmailExists = async function(email: string){
+  const existingEmail = await User.findOne({email});
+  return existingEmail;
+}
+UserSchema.statics.isUserNameExists = async function (username: string){
+  const existingUsername = await User.findOne({username});
+  return existingUsername;
 }
  
 export const User = model<UserType, UserModel>('User', UserSchema);

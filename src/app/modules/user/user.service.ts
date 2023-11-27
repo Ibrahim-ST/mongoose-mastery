@@ -5,6 +5,12 @@ const createUserIntoDb = async (userData: UserType) => {
   if (await User.isUserExists(userData.userId)) {
       throw new Error('User already exists');
   }
+  if(await User.isEmailExists(userData.email)){
+    throw new Error("Email already exists");
+  }
+  if(await User.isUserNameExists(userData.username)){
+    throw new Error("Username already exists");
+  }
   const result = await User.create(userData);
   return result;
 };
@@ -33,8 +39,30 @@ const getSingleUserFromDB = async (id: number) => {
   return result;
 };
 
+const updateUserFromDB = async (userId: number, userData: UserType) => {
+    try {
+      const result = await User.findOneAndUpdate(
+        { userId },
+        userData,
+        {
+          new: true,
+          runValidators: true,
+        },
+      );
+      return result;
+    } catch (error) {
+      throw new Error(`Failed to update user: ${error.message}`);
+    }
+};
+
+const deleteUser = async (userId: number) => {
+  
+}
+
 export const UserServices = {
   createUserIntoDb,
   getAllUsersFromDB,
   getSingleUserFromDB,
+  updateUserFromDB,
+  deleteUser,
 };

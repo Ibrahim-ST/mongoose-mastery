@@ -11,7 +11,7 @@ app.use(cors());
 app.use('/', UserRoutes);
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World!');
+  res.send('Welcome to mongoose mastery !');
 });
 
 export default app;

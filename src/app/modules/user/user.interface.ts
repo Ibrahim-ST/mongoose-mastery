@@ -34,4 +34,6 @@ export type UserType = {
 // creating static
 export interface UserModel extends Model<UserType> {
   isUserExists(userId: number): Promise<UserType | null>;
+  isUserNameExists(username: string) : Promise<UserType | null>;
+  isEmailExists(email: string) : Promise<UserType | null>;
 }
