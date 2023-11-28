@@ -71,10 +71,20 @@ const addNewProductInOrders = async (userId: number, orderData: any) => {
 };
 
 const getAllOrdersByUser = async (id: number) => {
-  const result = await User.findOne({userId: id}, {orders: 1, _id: 0});
+  const result = await User.findOne({ userId: id }, { orders: 1, _id: 0 });
   return result;
-}
+};
 
+const totalOrderPriceCalculator = async (userId: number) => {
+  const user = await User.findOne({userId});
+  if (!user) {
+    return null;
+  }
+  const totalPriceOfOrders = user.orders.reduce((totalPrice, order) => {
+    return totalPrice + order.price * order.quantity;
+  }, 0);
+  return totalPriceOfOrders;
+};
 export const UserServices = {
   createUserIntoDb,
   getAllUsersFromDB,
@@ -83,4 +93,5 @@ export const UserServices = {
   deleteUserFromDB,
   addNewProductInOrders,
   getAllOrdersByUser,
+  totalOrderPriceCalculator,
 };
