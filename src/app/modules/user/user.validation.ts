@@ -46,7 +46,7 @@ const UserTypeValidationSchema = z.object({
   username: z
     .string()
     .min(1, { message: 'Username cannot be empty' })
-    .max(50, { message: 'Username cannot exceed 50 characters' }),
+    .max(20, { message: 'Username cannot exceed 20 characters' }),
   password: z
     .string()
     .min(8, { message: 'Password must be at least 8 characters long' }),
@@ -64,7 +64,7 @@ const UserTypeValidationSchema = z.object({
       .max(50, { message: 'Hobby cannot exceed 50 characters' }),
   ),
   address: AddressSchema,
-  orders: z.array(OrdersSchema), 
+  orders: z.array(OrdersSchema),
 });
 
 export default UserTypeValidationSchema;

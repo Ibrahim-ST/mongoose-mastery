@@ -7,14 +7,12 @@ const createUser = async (req: Request, res: Response) => {
     const { user: userData } = req.body;
     const zodParsedData = UserTypeValidationSchema.parse(userData);
     const result = await UserServices.createUserIntoDb(zodParsedData);
-
     res.status(200).json({
       success: true,
       message: 'User created successfully!',
       data: result,
     });
   } catch (err: any) {
-    // const { code, message } = err.issues[0];
     res.status(500).json({
       success: false,
       message: err.message || 'User creation failed!',
@@ -54,7 +52,6 @@ const getSingleUser = async (req: Request, res: Response) => {
         },
       });
     }
-
     res.status(200).json({
       success: true,
       message: 'User fetched successfully!',
@@ -107,8 +104,17 @@ const updateUser = async (req: Request, res: Response) => {
 const deleteUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-    console.log(userId, typeof userId);
-    await UserServices.deleteUserFromDB(parseInt(userId));
+    const result = await UserServices.deleteUserFromDB(parseInt(userId));
+    if (result.deletedCount === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
     res.status(200).json({
       success: true,
       message: 'User deleted successfully!',
@@ -117,8 +123,38 @@ const deleteUser = async (req: Request, res: Response) => {
   } catch (err) {
     res.status(500).json({
       success: false,
-      message: `Failed to delete ${req.params.userID} id`,
-      error: err,
+      message: 'User not found',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    });
+  }
+};
+
+const addOrder = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const { productName, price, quantity } = req.body;
+    await UserServices.addNewProductInOrders(parseInt(userId), {
+      productName,
+      price,
+      quantity,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: 'Order created successfully!',
+      data: null,
+    });
+  } catch (err: any) {
+    res.status(404).json({
+      success: false,
+      message: err.message || 'User not found',
+      error: {
+        code: 404,
+        description: err.message || 'User not found!',
+      },
     });
   }
 };
@@ -129,4 +165,5 @@ export const UserController = {
   getSingleUser,
   updateUser,
   deleteUser,
+  addOrder,
 };

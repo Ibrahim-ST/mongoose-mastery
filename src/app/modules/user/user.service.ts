@@ -41,20 +41,33 @@ const getSingleUserFromDB = async (id: number) => {
 };
 
 const updateUserFromDB = async (userId: number, userData: UserType) => {
-  try {
-    const result = await User.findOneAndUpdate({ userId }, userData, {
-      new: true,
-      runValidators: true,
-    });
-    return result;
-  } catch (error: any) {
-    throw new Error(`User not found: ${error.message}`);
-  }
+  const result = await User.findOneAndUpdate({ userId }, userData, {
+    new: true,
+    runValidators: true,
+  });
+  return result;
 };
 
 const deleteUserFromDB = async (userId: number) => {
   const result = await User.deleteOne({ userId });
   return result;
+};
+
+const addNewProductInOrders = async (userId: number, orderData: any) => {
+  const userData = await User.findOne({ userId });
+  if (!userData) {
+    throw new Error('User not found');
+  }
+  if (!userData.orders) {
+    userData.orders = [];
+  }
+
+  userData.orders.push({
+    productName: orderData.productName,
+    price: orderData.price,
+    quantity: orderData.quantity,
+  });
+  await userData.save();
 };
 
 export const UserServices = {
@@ -63,4 +76,5 @@ export const UserServices = {
   getSingleUserFromDB,
   updateUserFromDB,
   deleteUserFromDB,
+  addNewProductInOrders,
 };
