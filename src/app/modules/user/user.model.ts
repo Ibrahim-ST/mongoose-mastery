@@ -90,7 +90,7 @@ const UserSchema = new Schema<UserType, UserModel>({
   orders: {
     type: [OrdersSchema],
     required: true,
-  },   
+  },
 });
 
 // pre save middleware
@@ -110,12 +110,6 @@ UserSchema.post('save', function (doc, next) {
   doc.password = ' ';
   next();
 });
-
-//query middleware
-// UserSchema.pre('find', function (next) {
-//   this.find({ isDeleted: { $ne: true } });
-//   next();
-// });
 
 //creating a custom static
 UserSchema.statics.isUserExists = async function (userId: number) {
