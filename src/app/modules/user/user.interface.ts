@@ -28,7 +28,7 @@ export type UserType = {
   isActive: boolean;
   hobbies: string[];
   address: AddressType;
-  orders: OrdersType[];
+  orders: OrdersType[]; 
 };
 
 // creating static

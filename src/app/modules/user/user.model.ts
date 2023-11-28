@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import bcrypt from 'bcrypt';
 import {
   AddressType,
   FullNameType,
@@ -6,6 +7,7 @@ import {
   UserModel,
   UserType,
 } from './user.interface';
+import config from '../../config';
 
 const FullNameSchema = new Schema<FullNameType>({
   firstName: {
@@ -88,32 +90,45 @@ const UserSchema = new Schema<UserType, UserModel>({
   orders: {
     type: [OrdersSchema],
     required: true,
-  },
+  },   
 });
 
-// // pre save middleware
-// UserSchema.pre('save', function() {
-//   console.log(this, 'pre hook');
-// })
+// pre save middleware
+UserSchema.pre('save', async function (next) {
+  // hashing password
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const user = this;
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_rounds),
+  );
+  next();
+});
 
-// // post save middleware
-// UserSchema.post('save', function(){
-//   console.log(this, 'post hook');
-// })
+// post save middleware
+UserSchema.post('save', function (doc, next) {
+  doc.password = ' ';
+  next();
+});
+
+//query middleware
+// UserSchema.pre('find', function (next) {
+//   this.find({ isDeleted: { $ne: true } });
+//   next();
+// });
 
 //creating a custom static
-UserSchema.statics.isUserExists = async function (userId: number){
-    const existingUser = await User.findOne({userId});
-    return existingUser;
-}
-UserSchema.statics.isEmailExists = async function(email: string){
-  const existingEmail = await User.findOne({email});
+UserSchema.statics.isUserExists = async function (userId: number) {
+  const existingUser = await User.findOne({ userId });
+  return existingUser;
+};
+UserSchema.statics.isEmailExists = async function (email: string) {
+  const existingEmail = await User.findOne({ email });
   return existingEmail;
-}
-UserSchema.statics.isUserNameExists = async function (username: string){
-  const existingUsername = await User.findOne({username});
+};
+UserSchema.statics.isUserNameExists = async function (username: string) {
+  const existingUsername = await User.findOne({ username });
   return existingUsername;
-}
- 
-export const User = model<UserType, UserModel>('User', UserSchema);
+};
 
+export const User = model<UserType, UserModel>('User', UserSchema);
