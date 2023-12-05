@@ -4,7 +4,7 @@ import UserTypeValidationSchema from './user.validation';
 
 const createUser = async (req: Request, res: Response) => {
   try {
-    const { user: userData } = req.body;
+    const userData = req.body;
     const zodParsedData = UserTypeValidationSchema.parse(userData);
     const result = await UserServices.createUserIntoDb(zodParsedData);
     res.status(200).json({
@@ -69,7 +69,7 @@ const getSingleUser = async (req: Request, res: Response) => {
 const updateUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-    const userData = req.body.user;
+    const userData = req.body;
     const result = await UserServices.updateUserFromDB(
       parseInt(userId),
       userData,
@@ -199,10 +199,10 @@ const totalOrderPrice = async (req: Request, res: Response) => {
         message: 'User not found',
         error: {
           code: 404,
-          description: 'User not foundddddddddd.',
+          description: 'User not found.',
         },
       });
-    }
+    } 
     res.status(200).json({
       success: true,
       message: 'Total price calculated successfully!',
@@ -211,7 +211,7 @@ const totalOrderPrice = async (req: Request, res: Response) => {
   } catch (err) {
     res.status(404).json({
       success: false,
-      message: 'User not foundxxxxx',
+      message: 'User not found',
       error: err,
     });
   }

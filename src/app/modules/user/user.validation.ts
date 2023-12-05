@@ -64,7 +64,7 @@ const UserTypeValidationSchema = z.object({
       .max(50, { message: 'Hobby cannot exceed 50 characters' }),
   ),
   address: AddressSchema,
-  orders: z.array(OrdersSchema),
+  orders: z.array(OrdersSchema).optional(),
 });
 
 export default UserTypeValidationSchema;

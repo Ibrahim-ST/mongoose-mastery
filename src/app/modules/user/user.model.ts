@@ -89,7 +89,6 @@ const UserSchema = new Schema<UserType, UserModel>({
   },
   orders: {
     type: [OrdersSchema],
-    required: true,
   },
 });
 
