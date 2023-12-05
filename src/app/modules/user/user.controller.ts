@@ -202,7 +202,7 @@ const totalOrderPrice = async (req: Request, res: Response) => {
           description: 'User not found.',
         },
       });
-    } 
+    }
     res.status(200).json({
       success: true,
       message: 'Total price calculated successfully!',

@@ -44,7 +44,7 @@ const updateUserFromDB = async (userId: number, userData: UserType) => {
   const result = await User.findOneAndUpdate({ userId }, userData, {
     new: true,
     runValidators: true,
-  }).select("-password") ;
+  }).select('-password');
   return result;
 };
 
@@ -80,9 +80,11 @@ const totalOrderPriceCalculator = async (userId: number) => {
   if (!user) {
     return null;
   }
-  const totalPriceOfOrders = user.orders && user.orders?.reduce((totalPrice, order) => {
-    return totalPrice + order.price * order.quantity;
-  }, 0);
+  const totalPriceOfOrders =
+    user.orders &&
+    user.orders?.reduce((totalPrice, order) => {
+      return totalPrice + order.price * order.quantity;
+    }, 0);
   return totalPriceOfOrders?.toFixed(2);
 };
 
